@@ -2,11 +2,14 @@
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 // DONE: ユーザ名とルーム名を設定して、通信できるようにする
-// TODO: コネクション削除時の通信処理
-import { ref, onMounted, watch, computed} from 'vue';
+// DONE: コネクション削除時の通信処理
+
+//TODO: refをreactiveでまとめる
+import { ref,computed} from 'vue';
 import {useRoute} from 'vue-router';
+
+
 const webSocket = ref<WebSocket>();
-// const body = ref('')
 const aList = ref<string[]>([]);
 const gameStatus = ref<boolean>(false)
 const title = ref<string|null|undefined>('')
@@ -23,21 +26,21 @@ const nowName = ref<string>("")
 const route =useRoute()
 const roomName = ref<string>('');
 const name = ref<string>('');
-const nextNumber = ref<number>(0);
 const jsonBody = ref<string>('');
 const submitUser = ref<string[]>([])
+
+
+// ルームログインページからのルーム名と名前を保存する
 roomName.value = route.query.roomName
 name.value = route.query.name
-console.log(roomName.value)
+
 const identifier = JSON.stringify({
         channel: 'WikiGameChannel',
         room: roomName.value,
         name: name.value
     })
-const delA = ['編集','英語版', '']
-const apiCall = {
-title: 'ランダム'
-}
+
+// タイトル名を取得する
 const getHeader = (parseBody:Document) => {
 title.value = parseBody?.getElementById('firstHeading')?.textContent
 console.log(title.value, answer.value, title.value === answer.value)
@@ -50,6 +53,8 @@ if(title.value === answer.value){
     webSocket.value?.send(JSON.stringify(msg));
 }
 }
+
+// references要素を削除する
 const deleteRef = (main:HTMLElement|null) => {
 const refElement = main?.querySelectorAll('.references');
 console.log(refElement)
@@ -59,12 +64,15 @@ console.log(refElement)
     refElement[key]?.remove();
     }
 }
+
+// 
 const createAList = (main:HTMLElement|null) => {
 const linkList= main?.querySelectorAll('a');
 linkList?.forEach(link => {
     aList.value.push(link.textContent as string);
 });
 }
+
 const createBodyList = (main:HTMLElement, parser: DOMParser) => {
 const BodyList = main.innerHTML.split(/<a(?: .+?)?>.*?<\/a>/g)
 const newBodyList = BodyList.map((b) => {
@@ -73,6 +81,7 @@ const newBodyList = BodyList.map((b) => {
 })
 return newBodyList;
 }
+
 const onClickSendText = (e) => {
     const msg = {
         command: 'message',
@@ -81,10 +90,12 @@ const onClickSendText = (e) => {
         };
     webSocket.value?.send(JSON.stringify(msg));
 }
+
+// websocketの初期化
 webSocket.value = new WebSocket("ws://localhost:3030/cable");
+
+// websocketの通信開始
 webSocket.value.onopen = () => {
-// const subscribeMsg = {"command":"subscribe", "identifier": "{\"channel\":\"WikiGameChannel\"}"}
-// webSocket.value?.send(JSON.stringify(subscribeMsg))
     const msg = {
         command: 'subscribe',
         identifier: identifier
@@ -93,7 +104,7 @@ webSocket.value.onopen = () => {
     console.log('connect')
 }
 
-// TODO: closeがうまくできない
+// websocketの通信を閉じる
 webSocket.value.close = () => {
     const msg = {
         command: 'message',
@@ -103,10 +114,12 @@ webSocket.value.close = () => {
     webSocket.value?.send(JSON.stringify(msg));
 }
 
+// ブラウザが閉じる前にwebSocketをCloseする
 window.onbeforeunload = () =>  {
     webSocket.value?.close();
 };
 
+// ゲームをスタートする
 const onClickStartGame = (e) => {
 gameStatus.value = true;
 const msg = {
@@ -117,6 +130,8 @@ const msg = {
 webSocket.value?.send(JSON.stringify(msg));
 }
 
+//websocket通信時のメッセージ受け取りを行う関数
+//TODO: websocketをイベントで分けられないのか
 webSocket.value.onmessage = async (e) => {
     const incoming_msg = JSON.parse(e.data);
     console.log("incoming_msg: ",incoming_msg)
@@ -128,10 +143,12 @@ webSocket.value.onmessage = async (e) => {
     return
     }
     const data = await JSON.parse(e.data)
+    // エラー時
     if(data.message.error){
         errorStatus.value = true
         errorMessage.value = data.message.message
     }
+
     if(data.message.message.answerTitle){
         if(!answer.value) answer.value = data.message.message.answerTitle.split(' - ')[0];
         connect.value = true
@@ -162,22 +179,11 @@ webSocket.value.onmessage = async (e) => {
     }
     if(data.message.message.data){
         jsonBody.value = data.message.message.data
-    
         gameStatus.value = true;
-        // aList.value = [];
-        // body.value = '';
-        // title.value = '';
-        // const parser = new DOMParser();
-        // const parseBody = parser.parseFromString(jsonBody.value, "text/html")
-        // const main = parseBody?.getElementById('mw-content-text');
-        // getHeader(parseBody);
-        // deleteRef(main);
-        // createAList(main);
-        // const bodyList = createBodyList(main as HTMLElement, parser)
-        // body.value = bodyList;
     }
     
 };
+// websocketからメッセージが来て変更があった場合にbodyを書き換える
 const body = computed(()=>{
     gameStatus.value = true;
     aList.value = [];
@@ -191,25 +197,19 @@ const body = computed(()=>{
     const bodyList = createBodyList(main as HTMLElement, parser)
     return bodyList
 })
-// watch(nowNumber, () => {
-//     const parser = new DOMParser();
-//     const parseBody = parser.parseFromString(jsonBody.value, "text/html")
-//     const main = parseBody?.getElementById('mw-content-text');
-//     getHeader(parseBody);
-//     deleteRef(main);
-//     createAList(main);
-//     const bodyList = createBodyList(main as HTMLElement, parser)
-//     body.value = bodyList;
-// })
+
 </script>
 
 <template>
+<!-- エラー -->
   <div v-if="errorStatus">
   {{errorMessage}}
   </div>
+  <!-- 通信中 -->
   <div v-else-if="!connect">
   通信中
   </div>
+  <!-- ゲームスタート前 -->
   <div v-else-if="!gameStatus">
     <div>{{connectNum}}</div>
     <div>ルームID: {{roomName}}</div>
