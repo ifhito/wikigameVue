@@ -162,9 +162,9 @@ webSocket.value.onmessage = async (e) => {
         connectNum.value = data.message.message.connectNumber
         return
     }
-    if(data.message.message.data?.winner){
-        console.log(data.message.message.data.winner)
-        winner.value = data.message.message.data.winner
+    if(data.message.message.winner){
+        console.log(data.message.message.winner)
+        winner.value = data.message.message.winner
         defineWinner.value = true
         return
     }
