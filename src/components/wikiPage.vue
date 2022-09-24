@@ -9,11 +9,18 @@ import { ref,computed, watch} from 'vue';
 import {useRoute} from 'vue-router';
 import { useDecideAction, useFixHTML } from '../customHooks';
 
+const route =useRoute()
+
+const roomName = ref<string>('');
+const name = ref<string>('');
+// ルームログインページからのルーム名と名前を保存する
+roomName.value = route.query.roomName?.toString() ?? 'notRoomName'
+name.value = route.query.name?.toString() ?? 'notName'
+
 const {
     answer,
     connectNum,
     submitUser,
-    myNumber,
     connect,
     switchAction,
     errorMessage,
@@ -39,13 +46,6 @@ watch(title, () => {
         webSocket.value?.send(JSON.stringify(msg));
     }
 })
-const route =useRoute()
-
-const roomName = ref<string>('');
-const name = ref<string>('');
-// ルームログインページからのルーム名と名前を保存する
-roomName.value = route.query.roomName?.toString() ?? 'notRoomName'
-name.value = route.query.name?.toString() ?? 'notName'
     
 const delA = ['編集','英語版', '']
 const identifier = JSON.stringify({
@@ -55,17 +55,17 @@ const identifier = JSON.stringify({
 });
 
 // ボタンを押したときにその押された要素をバックエンドに伝える
-const onClickSendText = (e) => {
+const onClickSendText = (e:any) => {
     const msg = {
         command: 'message',
         identifier: identifier,
-        data: JSON.stringify({action: "send_url", title: e.target.value, myNumber: myNumber.value, nextNumber: nowNumber.value}),
+        data: JSON.stringify({action: "send_url", title: e.target.value, nextNumber: nowNumber.value}),
     };
     webSocket.value?.send(JSON.stringify(msg));
 }
 
 // ゲームをスタートする
-const onClickStartGame = (e) => {
+const onClickStartGame = (e:any) => {
     const msg = {
         command: 'message',
         identifier: identifier,
@@ -99,7 +99,7 @@ webSocket.value.close = () => {
     const msg = {
         command: 'message',
         identifier: identifier,
-        data: JSON.stringify({action: "delete_user", myNumber: myNumber.value, nextNumber: nowNumber.value, nowName: nowName.value, myName: name.value})
+        data: JSON.stringify({action: "delete_user", nextNumber: nowNumber.value, nowName: nowName.value, myName: name.value})
     }
     webSocket.value?.send(JSON.stringify(msg));
 }

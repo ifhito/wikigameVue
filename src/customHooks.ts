@@ -1,6 +1,6 @@
-import { ref, computed, reactive, toRefs } from "vue";
+import { ref, computed, reactive, toRefs, Ref } from "vue";
 
-export const useFixHTML = (jsonBody) => {
+export const useFixHTML = (jsonBody: Ref<string>) => {
   const aList = ref<string[]>([]);
   const title = ref<string | null | undefined>("");
   // タイトル名を取得する
@@ -53,13 +53,13 @@ export const useFixHTML = (jsonBody) => {
   return { body, title, aList };
 };
 
+type messageType = {};
 export const useDecideAction = () => {
   //subscribeの処理
   const subscribeRef = reactive({
     answer: "",
     connectNum: 0,
     submitUser: [],
-    myNumber: 0,
     connect: false,
   });
   // startGameの変数
@@ -81,7 +81,7 @@ export const useDecideAction = () => {
     errorStatus: false,
   });
 
-  const switchAction = (message) => {
+  const switchAction = (message: any) => {
     console.log(message.action);
     switch (message.action) {
       case "error":
@@ -93,7 +93,6 @@ export const useDecideAction = () => {
         if (!subscribeRef.answer)
           subscribeRef.answer = message.answerTitle.split(" - ")[0];
         subscribeRef.submitUser = message.nameList;
-        subscribeRef.myNumber = subscribeRef.submitUser.indexOf(name.value);
         subscribeRef.connectNum = message.connectNumber;
         break;
       case "start_game":
