@@ -7,25 +7,46 @@
 //TODO: refをreactiveでまとめる
 import { ref,computed, watch} from 'vue';
 import {useRoute} from 'vue-router';
-import { useFixHTML } from '../customHooks';
+import { useDecideAction, useFixHTML } from '../customHooks';
 
+// //subscribeの処理
+// const answer = ref<string|null|undefined>('')
+// const connectNum = ref<number>(0);
+// const submitUser = ref<string[]>([])
+// const myNumber = ref<number>(0)
+// const connect = ref<boolean>(false);
 
-const webSocket = ref<WebSocket>();
-const gameStatus = ref<boolean>(false)
-const answer = ref<string|null|undefined>('')
-const winner = ref<string|null|undefined>('')
-const defineWinner = ref<boolean>(false)
-const connect = ref<boolean>(false);
-const connectNum = ref<number>(0);
-const errorMessage = ref<string>('');
-const errorStatus = ref<boolean>(false);
-const myNumber = ref<number>(0)
-const nowNumber = ref<number>(0)
-const nowName = ref<string>("")
-const roomName = ref<string>('');
-const name = ref<string>('');
-const jsonBody = ref<string>('');
-const submitUser = ref<string[]>([])
+// //start_gameの処理
+// const jsonBody = ref<string>('');
+// const nowNumber = ref<number>(0)
+// const nowName = ref<string>("")
+// const gameStatus = ref<boolean>(false)
+
+// // decied_winnerの処理
+// const winner = ref<string|null|undefined>('')
+// const defineWinner = ref<boolean>(false)
+
+// // エラー時の処理
+// const errorMessage = ref<string>('');
+// const errorStatus = ref<boolean>(false);
+
+const {
+    answer,
+    connectNum,
+    submitUser,
+    myNumber,
+    connect,
+    switchAction,
+    errorMessage,
+    errorStatus,
+    winner,
+    defineWinner,
+    jsonBody,
+    nowNumber,
+    nowName,
+    gameStatus
+    } = useDecideAction()
+
 
 const {body, title, aList} = useFixHTML(jsonBody);
 
@@ -40,6 +61,9 @@ watch(title, () => {
     }
 })
 const route =useRoute()
+
+const roomName = ref<string>('');
+const name = ref<string>('');
 // ルームログインページからのルーム名と名前を保存する
 roomName.value = route.query.roomName?.toString() ?? 'notRoomName'
 name.value = route.query.name?.toString() ?? 'notName'
@@ -63,7 +87,6 @@ const onClickSendText = (e) => {
 
 // ゲームをスタートする
 const onClickStartGame = (e) => {
-    gameStatus.value = true;
     const msg = {
         command: 'message',
         identifier: identifier,
@@ -72,36 +95,7 @@ const onClickStartGame = (e) => {
     webSocket.value?.send(JSON.stringify(msg));
 }
 
-const switchAction = (message) => {
-    console.log(message.action)
-    switch(message.action){
-        case 'error':
-            errorStatus.value = true
-            errorMessage.value = message.message
-            break;
-        case 'subscribed':
-            connect.value = true
-            if(!answer.value) answer.value = message.answerTitle.split(' - ')[0];
-            submitUser.value = message.nameList
-            myNumber.value = submitUser.value.indexOf(name.value)
-            connectNum.value = message.connectNumber
-            break;
-        case 'start_game':
-        case 'send_url':
-            nowNumber.value = message.nextNumber
-            nowName.value = message.nextName
-            jsonBody.value = message.data
-            gameStatus.value = true;    
-            break;
-        case 'decied_winner':
-            winner.value = message.winner
-            defineWinner.value = true
-            break;
-        default:
-            return;
-    }
-}
-
+const webSocket = ref<WebSocket>();
 // websocketの初期化
 webSocket.value = new WebSocket("ws://localhost:3030/cable");
 
@@ -135,9 +129,6 @@ webSocket.value.close = () => {
 window.onbeforeunload = () =>  {
     webSocket.value?.close();
 };
-
-
-
 </script>
 
 <template>

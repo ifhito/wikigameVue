@@ -1,4 +1,4 @@
-import { ref, computed } from "vue";
+import { ref, computed, reactive, toRefs } from "vue";
 
 export const useFixHTML = (jsonBody) => {
   const aList = ref<string[]>([]);
@@ -51,4 +51,89 @@ export const useFixHTML = (jsonBody) => {
   });
 
   return { body, title, aList };
+};
+
+export const useDecideAction = () => {
+  //subscribeの処理
+  const subscribeRef = reactive({
+    answer: "",
+    connectNum: 0,
+    submitUser: [],
+    myNumber: 0,
+    connect: false,
+  });
+  //   const answer = ref<string | null | undefined>("");
+  //   const connectNum = ref<number>(0);
+  //   const submitUser = ref<string[]>([]);
+  //   const myNumber = ref<number>(0);
+  //   const connect = ref<boolean>(false);
+  const startGameRef = reactive({
+    jsonBody: "",
+    nowNumber: 0,
+    nowName: "",
+    gameStatus: false,
+  });
+
+  const deciedWinnerRef = reactive({
+    winner: "",
+    defineWinner: false,
+  });
+
+  const errorRef = reactive({
+    errorMessage: "",
+    errorStatus: false,
+  });
+
+  //start_gameの処理
+  //   const jsonBody = ref<string>("");
+  //   const nowNumber = ref<number>(0);
+  //   const nowName = ref<string>("");
+  //   const gameStatus = ref<boolean>(false);
+
+  // decied_winnerの処理
+  //   const winner = ref<string | null | undefined>("");
+  //   const defineWinner = ref<boolean>(false);
+
+  // エラー時の処理
+  //   const errorMessage = ref<string>("");
+  //   const errorStatus = ref<boolean>(false);
+
+  const switchAction = (message) => {
+    console.log(message.action);
+    switch (message.action) {
+      case "error":
+        errorRef.errorStatus = true;
+        errorRef.errorMessage = message.message;
+        break;
+      case "subscribed":
+        subscribeRef.connect = true;
+        if (!subscribeRef.answer)
+          subscribeRef.answer = message.answerTitle.split(" - ")[0];
+        subscribeRef.submitUser = message.nameList;
+        subscribeRef.myNumber = subscribeRef.submitUser.indexOf(name.value);
+        subscribeRef.connectNum = message.connectNumber;
+        break;
+      case "start_game":
+      case "send_url":
+        startGameRef.nowNumber = message.nextNumber;
+        startGameRef.nowName = message.nextName;
+        startGameRef.jsonBody = message.data;
+        startGameRef.gameStatus = true;
+        break;
+      case "decied_winner":
+        deciedWinnerRef.winner = message.winner;
+        deciedWinnerRef.defineWinner = true;
+        break;
+      default:
+        return;
+    }
+  };
+
+  return {
+    switchAction,
+    ...toRefs(subscribeRef),
+    ...toRefs(startGameRef),
+    ...toRefs(deciedWinnerRef),
+    ...toRefs(errorRef),
+  };
 };
