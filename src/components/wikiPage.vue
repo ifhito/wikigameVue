@@ -4,31 +4,10 @@
 // DONE: ユーザ名とルーム名を設定して、通信できるようにする
 // DONE: コネクション削除時の通信処理
 
-//TODO: refをreactiveでまとめる
+//DONE: refをreactiveでまとめる
 import { ref,computed, watch} from 'vue';
 import {useRoute} from 'vue-router';
 import { useDecideAction, useFixHTML } from '../customHooks';
-
-// //subscribeの処理
-// const answer = ref<string|null|undefined>('')
-// const connectNum = ref<number>(0);
-// const submitUser = ref<string[]>([])
-// const myNumber = ref<number>(0)
-// const connect = ref<boolean>(false);
-
-// //start_gameの処理
-// const jsonBody = ref<string>('');
-// const nowNumber = ref<number>(0)
-// const nowName = ref<string>("")
-// const gameStatus = ref<boolean>(false)
-
-// // decied_winnerの処理
-// const winner = ref<string|null|undefined>('')
-// const defineWinner = ref<boolean>(false)
-
-// // エラー時の処理
-// const errorMessage = ref<string>('');
-// const errorStatus = ref<boolean>(false);
 
 const {
     answer,

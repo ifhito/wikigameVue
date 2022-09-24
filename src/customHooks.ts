@@ -62,41 +62,24 @@ export const useDecideAction = () => {
     myNumber: 0,
     connect: false,
   });
-  //   const answer = ref<string | null | undefined>("");
-  //   const connectNum = ref<number>(0);
-  //   const submitUser = ref<string[]>([]);
-  //   const myNumber = ref<number>(0);
-  //   const connect = ref<boolean>(false);
+  // startGameの変数
   const startGameRef = reactive({
     jsonBody: "",
     nowNumber: 0,
     nowName: "",
     gameStatus: false,
   });
-
+  // diciedWinnerの変数
   const deciedWinnerRef = reactive({
     winner: "",
     defineWinner: false,
   });
 
+  // エラーの変数
   const errorRef = reactive({
     errorMessage: "",
     errorStatus: false,
   });
-
-  //start_gameの処理
-  //   const jsonBody = ref<string>("");
-  //   const nowNumber = ref<number>(0);
-  //   const nowName = ref<string>("");
-  //   const gameStatus = ref<boolean>(false);
-
-  // decied_winnerの処理
-  //   const winner = ref<string | null | undefined>("");
-  //   const defineWinner = ref<boolean>(false);
-
-  // エラー時の処理
-  //   const errorMessage = ref<string>("");
-  //   const errorStatus = ref<boolean>(false);
 
   const switchAction = (message) => {
     console.log(message.action);
