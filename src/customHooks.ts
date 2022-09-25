@@ -1,6 +1,7 @@
 import { ref, computed, reactive, toRefs, Ref } from "vue";
 
 export const useFixHTML = (jsonBody: Ref<string>) => {
+  console.log("Body", jsonBody);
   const aList = ref<string[]>([]);
   const title = ref<string | null | undefined>("");
   // タイトル名を取得する
@@ -53,7 +54,6 @@ export const useFixHTML = (jsonBody: Ref<string>) => {
   return { body, title, aList };
 };
 
-type messageType = {};
 export const useDecideAction = () => {
   //subscribeの処理
   const subscribeRef = reactive({
