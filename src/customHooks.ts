@@ -1,19 +1,16 @@
 import { ref, computed, reactive, toRefs, Ref } from "vue";
 
 export const useFixHTML = (jsonBody: Ref<string>) => {
-  console.log("Body", jsonBody);
   const aList = ref<string[]>([]);
   const title = ref<string | null | undefined>("");
   // タイトル名を取得する
   const getHeader = (parseBody: Document) => {
     title.value = parseBody?.getElementById("firstHeading")?.textContent;
-    // console.log(title.value, answer.value, title.value === answer.value)
   };
 
   // references要素を削除する
   const deleteRef = (main: HTMLElement | null) => {
-    const refElement = main?.querySelectorAll(".references");
-    // console.log(refElement)
+    const refElement = main?.querySelectorAll(".reference");
     const refLen = refElement?.length;
     if (refLen === 0 || !refLen) return;
     for (let key in [...Array(refLen).keys()]) {
@@ -82,7 +79,6 @@ export const useDecideAction = () => {
   });
 
   const switchAction = (message: any) => {
-    console.log(message.action);
     switch (message.action) {
       case "error":
         errorRef.errorStatus = true;
