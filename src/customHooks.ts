@@ -59,6 +59,8 @@ export const useDecideAction = () => {
     submitUser: [],
     connect: false,
   });
+
+  // TODO: startGameだと名前的に微妙な気がする
   // startGameの変数
   const startGameRef = reactive({
     jsonBody: "",
