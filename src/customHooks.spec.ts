@@ -43,8 +43,55 @@ describe("test of useDecideAction", () => {
     expect(errorStatus.value).toBe(true);
     expect(errorMessage.value).toBe("errorです");
   });
-  test("subscribedのアクションが来た際に、subscribeRefのオブジェクトの値が渡され、変数に入ること", () => {});
-  test("start_gameのアクションが来た際に、startGameRef変数に値が入ること", () => {});
-  test("send_urlのアクションが来た際に、startGameRef変数に値が入ること", () => {});
-  test("decied_winnerのアクションが来た際に、deciedWinnerRefに値が入ること", () => {});
+  test("subscribedのアクションが来た際に、subscribeRefのオブジェクトの値が渡され、変数に入ること", () => {
+    const message = {
+      action: "subscribed",
+      answerTitle: "テスト - Wikipedia",
+      nameList: ["test"],
+      connectNumber: 0,
+    };
+    switchAction(message);
+    expect(answer.value).toBe("テスト");
+    expect(submitUser.value).toEqual(["test"]);
+    expect(connectNum.value).toBe(0);
+  });
+  test("start_gameのアクションが来た際に、startGameRef変数に値が入ること", () => {
+    const message = {
+      action: "start_game",
+      nextNumber: 1,
+      nextName: "testUser",
+      data: '<!DOCTYPE html><html lang="ja"><head>  <meta charset="UTF-8" />  <link rel="icon" href="/favicon.ico" />  <meta name="viewport" content="width=device-width, initial-scale=1.0" />  <title>WikiGame</title></head><body>  <h1 id="firstHeading">test</h1><div id="mw-content-text">testがこれです<a href="https://xxxxxxxhogehoge.cotest">test</a>、それでテストになりそうなことが喜びと悲しみなんですよ.<a href="https://teste.ssss">yuuuutest</a>とはなんなのだろうか?<div class="reference">Reference</div></div></body></html>',
+    };
+    switchAction(message);
+    expect(nowNumber.value).toBe(1);
+    expect(nowName.value).toBe("testUser");
+    expect(jsonBody.value).toBe(
+      '<!DOCTYPE html><html lang="ja"><head>  <meta charset="UTF-8" />  <link rel="icon" href="/favicon.ico" />  <meta name="viewport" content="width=device-width, initial-scale=1.0" />  <title>WikiGame</title></head><body>  <h1 id="firstHeading">test</h1><div id="mw-content-text">testがこれです<a href="https://xxxxxxxhogehoge.cotest">test</a>、それでテストになりそうなことが喜びと悲しみなんですよ.<a href="https://teste.ssss">yuuuutest</a>とはなんなのだろうか?<div class="reference">Reference</div></div></body></html>'
+    );
+    expect(gameStatus.value).toBe(true);
+  });
+  test("send_urlのアクションが来た際に、startGameRef変数に値が入ること", () => {
+    const message = {
+      action: "send_url",
+      nextNumber: 1,
+      nextName: "testUser",
+      data: '<!DOCTYPE html><html lang="ja"><head>  <meta charset="UTF-8" />  <link rel="icon" href="/favicon.ico" />  <meta name="viewport" content="width=device-width, initial-scale=1.0" />  <title>WikiGame</title></head><body>  <h1 id="firstHeading">test</h1><div id="mw-content-text">testがこれです<a href="https://xxxxxxxhogehoge.cotest">test</a>、それでテストになりそうなことが喜びと悲しみなんですよ.<a href="https://teste.ssss">yuuuutest</a>とはなんなのだろうか?<div class="reference">Reference</div></div></body></html>',
+    };
+    switchAction(message);
+    expect(nowNumber.value).toBe(1);
+    expect(nowName.value).toBe("testUser");
+    expect(jsonBody.value).toBe(
+      '<!DOCTYPE html><html lang="ja"><head>  <meta charset="UTF-8" />  <link rel="icon" href="/favicon.ico" />  <meta name="viewport" content="width=device-width, initial-scale=1.0" />  <title>WikiGame</title></head><body>  <h1 id="firstHeading">test</h1><div id="mw-content-text">testがこれです<a href="https://xxxxxxxhogehoge.cotest">test</a>、それでテストになりそうなことが喜びと悲しみなんですよ.<a href="https://teste.ssss">yuuuutest</a>とはなんなのだろうか?<div class="reference">Reference</div></div></body></html>'
+    );
+    expect(gameStatus.value).toBe(true);
+  });
+  test("decied_winnerのアクションが来た際に、deciedWinnerRefに値が入ること", () => {
+    const message = {
+      action: "decied_winner",
+      winner: "testUser",
+    };
+    switchAction(message);
+    expect(winner.value).toBe("testUser");
+    expect(defineWinner.value).toBe(true);
+  });
 });
