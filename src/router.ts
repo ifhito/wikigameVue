@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
-import makeRoom from "./components/makeRoom.vue";
-import wikiPage from "./components/wikiPage.vue";
+import makeRoom from "./components/Pages/makeRoom.vue";
+import wikiPage from "./components/Pages/wikiPage.vue";
 const routes = [
   { path: "/", name: "makeRoom", component: makeRoom },
   { path: "/game", name: "wikiPage", component: wikiPage },
