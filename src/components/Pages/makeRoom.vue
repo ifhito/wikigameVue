@@ -5,6 +5,7 @@
 import { ref, onMounted} from 'vue';
 import { useRouter } from 'vue-router'
 import WithInput from '../Moleculs/WithInput.vue';
+import Button from '../Atoms/Button.vue';
 const name = ref<string>('')
 const roomNameBool = ref<boolean>(false)
 const roomName = ref<string>('')
@@ -42,18 +43,12 @@ const onClick = () => {
           </template>
         </WithInput>
       </div>
-      <button
-        type="button"
-        class="ui button"
-        @click="onClick"
-      >
-        Submit
-      </button>
-      <button
-        v-if="!roomNameBool"
-        type="button"
-        @click="()=>roomNameBool = true"
-      >すでにある部屋に入る</button>
+      <Button button-value="" button-type="button" :on-click="onClick">
+        送信
+      </Button>
+      <Button v-if="!roomNameBool" button-value="" button-type="button" :on-click="() => roomNameBool = true">
+        すでにある部屋に入る
+      </Button>
     </form>
 </template>
 

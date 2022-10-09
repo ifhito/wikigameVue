@@ -7,7 +7,7 @@
 </script>
     
 <template>
-    <div>{{winner}}</div>
+    <div>{{winner}}が勝者です</div>
 </template>
 
 <style scoped>
