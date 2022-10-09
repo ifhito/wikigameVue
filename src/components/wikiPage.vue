@@ -125,6 +125,7 @@ window.onbeforeunload = () =>  {
     <div>ルームID: {{roomName}}</div>
     <button @click="onClickStartGame">StartGame</button>
   </div>
+  <!-- ゲーム中画面 -->
   <div v-else-if="!defineWinner">
       <h1>{{title}}</h1>
       <template v-for="i in body.length" :key="`num_${i}`">
@@ -144,6 +145,7 @@ window.onbeforeunload = () =>  {
         </li>
       </ul>
   </div>
+  <!-- 勝者決定後 -->
   <div v-else>
     勝者は{{winner}}さんです
   </div>
