@@ -7,7 +7,7 @@
 </script>
     
 <template>
-    <label :for="labelFor"><slot name="name"></slot></label>
+    <label :for="labelFor"><slot name="label"></slot></label>
     <slot name="formContents"></slot>
 </template>
 
