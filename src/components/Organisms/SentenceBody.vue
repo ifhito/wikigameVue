@@ -13,11 +13,11 @@
 </script>
     
 <template>
-    <template v-for="i in body.length" :key="`num_${i}`">
+    <template v-for="i of [...Array(body.length).keys()]" :key="`num_${i}`">
         <span v-html="body[i]"></span>
-        <span v-if="myName=== nowName">
+        <span v-if="myName === nowName">
             <Button
-              v-if="!(delA.includes(aList[i]) || /[*.]/.test(aList[i]))"
+              v-if="!(delA.includes(aList[i]) || /[*.]/.test(aList[i])) && aList[i]"
               :button-value="aList[i]"
               :on-click="onClickSendText"
               button-type="button"
@@ -26,7 +26,7 @@
             </Button>
         </span>
         <span v-else>
-           <span v-if="!(delA.includes(aList[i]) || /[*.]/.test(aList[i]))" :value="aList[i]">{{aList[i]}}</span>
+           <span v-if="!(delA.includes(aList[i]) || /[*.]/.test(aList[i])) && aList[i]" :value="aList[i]">{{aList[i]}}</span>
         </span>
     </template>
 </template>
