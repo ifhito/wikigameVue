@@ -10,14 +10,32 @@ export const useFixHTML = (jsonBody: Ref<string>) => {
 
   // references要素を削除する
   const deleteRef = (main: HTMLElement | null) => {
-    const refElement = main?.querySelectorAll(".reference");
-    const refLen = refElement?.length;
+    const refElements = main?.querySelectorAll(".reference, .reflist");
+    const refLen = refElements?.length;
     if (refLen === 0 || !refLen) return;
     for (let key in [...Array(refLen).keys()]) {
-      refElement[key]?.remove();
+      refElements[key]?.remove();
     }
   };
 
+  const deleteTable = (main: HTMLElement | null) => {
+    const tableElements = main?.querySelectorAll("table *");
+    const tableLen = tableElements?.length;
+    if (tableLen === 0 || !tableLen) return;
+    for (let key in [...Array(tableLen).keys()]) {
+      tableElements[key]?.remove();
+    }
+  };
+  const deleteStyle = (main: HTMLElement | null) => {
+    const styleElements = main?.querySelectorAll(
+      'style *, [data-mw-deduplicate*="TemplateStyles"]'
+    );
+    const styleLen = styleElements?.length;
+    if (styleLen === 0 || !styleLen) return;
+    for (let key in [...Array(styleLen).keys()]) {
+      styleElements[key]?.remove();
+    }
+  };
   // リンクのリストを作る(ボタンに変更する必要があるため)
   const createAList = (main: HTMLElement | null) => {
     const linkList = main?.querySelectorAll("a");
@@ -42,6 +60,8 @@ export const useFixHTML = (jsonBody: Ref<string>) => {
     const parseBody = parser.parseFromString(jsonBody.value, "text/html");
     const main = parseBody?.getElementById("mw-content-text");
     getHeader(parseBody);
+    deleteTable(main);
+    deleteStyle(main);
     deleteRef(main);
     createAList(main);
     const bodyList = createBodyList(main as HTMLElement, parser);
