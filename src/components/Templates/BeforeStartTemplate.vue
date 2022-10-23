@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, defineProps, PropType, Ref} from 'vue'
+import Button from '../Atoms/Button.vue'
 interface Props {
     connectNum: number;
     roomName: string;
@@ -12,7 +13,9 @@ const props = defineProps<Props>()
     <div>
         <div>{{connectNum}}</div>
         <div>ルームID: {{roomName}}</div>
-        <button @click="onClickStartGame">StartGame</button>
+        <Button button-id="startGame" :on-click="onClickStartGame" button-type="button">
+            StartGame
+        </Button>
     </div>
 </template>
 
