@@ -3,7 +3,7 @@ import PlayerInfo from "../../components/Organisms/PlayerInfo.vue";
 import { describe, test, expect, beforeEach } from "vitest";
 import { ref } from "vue";
 
-describe("withinputのテスト", () => {
+describe("PlayerInfoのテスト", () => {
   const wrapper = shallowMount(PlayerInfo, {
     props: {
       answer: "test",
