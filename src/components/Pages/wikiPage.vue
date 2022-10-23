@@ -129,7 +129,7 @@ window.onbeforeunload = () =>  {
   />
   <!-- ゲーム中画面 -->
   <MainGameTemplate
-    v-else-if="!defineWinner"
+    v-else-if="!defineWinner && gameStatus"
     :title="title"
     :body="body"
     :my-name="myName"
