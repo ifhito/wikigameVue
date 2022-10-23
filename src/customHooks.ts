@@ -2,10 +2,10 @@ import { ref, computed, reactive, toRefs, Ref } from "vue";
 
 export const useFixHTML = (jsonBody: Ref<string>) => {
   const aList = ref<string[]>([]);
-  const title = ref<string | null | undefined>("");
+  const title = ref<string>("");
   // タイトル名を取得する
   const getHeader = (parseBody: Document) => {
-    title.value = parseBody?.getElementById("firstHeading")?.textContent;
+    title.value = parseBody?.getElementById("firstHeading")?.textContent || "";
   };
 
   // references要素を削除する
