@@ -1,9 +1,9 @@
-import { mount, shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import SentenceBody from "../../components/Organisms/SentenceBody.vue";
-import { describe, test, expect, beforeEach } from "vitest";
+import { describe, test, expect } from "vitest";
 import { ref } from "vue";
 
-describe("withinputのテスト", () => {
+describe("SentenceBodyのテスト", () => {
   const testRef = ref("");
   const wrapper = mount(SentenceBody, {
     props: {
@@ -16,7 +16,7 @@ describe("withinputのテスト", () => {
       nowName: "testUser",
       aList: ["test", "yuuuutest"],
       delA: ["編集", "英語版", ""],
-      onClickSendText: (event) =>
+      onClickSendText: (event: any) =>
         (testRef.value = event.target.getAttribute("value")),
     },
   });
