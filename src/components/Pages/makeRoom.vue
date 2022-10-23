@@ -43,10 +43,10 @@ const onClick = () => {
           </template>
         </WithInput>
       </div>
-      <Button button-value="" button-type="button" :on-click="onClick">
+      <Button button-id="send" button-value="" button-type="button" :on-click="onClick">
         送信
       </Button>
-      <Button v-if="!roomNameBool" button-value="" button-type="button" :on-click="() => roomNameBool = true">
+      <Button button-id="inTheRoom" v-if="!roomNameBool" button-value="" button-type="button" :on-click="() => roomNameBool = true">
         すでにある部屋に入る
       </Button>
     </form>
