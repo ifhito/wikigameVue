@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-// TODO: 通信が切れたらクローズする
+// DONE: 通信が切れたらクローズする
 import { ref, onMounted} from 'vue';
 import { useRouter } from 'vue-router'
 import WithInput from '../Moleculs/WithInput.vue';
