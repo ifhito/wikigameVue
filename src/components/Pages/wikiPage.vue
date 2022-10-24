@@ -35,7 +35,9 @@ const {
     jsonBody,
     nowNumber,
     nowName,
-    gameStatus
+    gameStatus,
+    isNotFound,
+    notFoundText
     } = useDecideAction()
 
 
@@ -139,6 +141,8 @@ window.onbeforeunload = () =>  {
     :answer="answer"
     :submit-user="submitUser"
     :on-click-send-text="onClickSendText"
+    :not-found-text="notFoundText"
+    :is-not-found="isNotFound"
   />
   <!-- 勝者決定後 -->
   <DefineWinnerTemplate v-else :winner="winner"/>

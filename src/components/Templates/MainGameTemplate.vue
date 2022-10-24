@@ -12,11 +12,14 @@ interface Props {
     onClickSendText: (e:any) => void;
     answer: string;
     submitUser: string[];
+    isNotFound: boolean;
+    notFoundText: string;
 };
 const props = defineProps<Props>()
 </script>
     
 <template>
+    <div id="notFound" v-if="isNotFound" role="alert">{{notFoundText}}はwikipediaのページとして存在しません</div>
     <h1>{{title}}</h1>
     <SentenceBody :body="body" :my-name="myName" :now-name="nowName" :a-list="aList" :del-a="delA" :onClickSendText="onClickSendText" />
     <PlayerInfo :answer="answer" :now-name="nowName" :submit-user="submitUser" :my-name="myName" />
