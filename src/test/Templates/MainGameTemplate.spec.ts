@@ -23,4 +23,10 @@ describe("MainGameTemplateのテスト", () => {
   test("titleが正しく表示されること", async () => {
     expect(wrapper.html()).contain("<h1>testContent</h1>");
   });
+  test("isNotFoundがtrueの時に文章が表示されること", async () => {
+    await wrapper.setProps({ isNotFound: true, notFoundText: "test" });
+    expect(wrapper.find('div[id="notFound"]').text()).toBe(
+      "testはwikipediaのページとして存在しません"
+    );
+  });
 });
