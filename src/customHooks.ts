@@ -81,32 +81,40 @@ export const useDecideAction = () => {
   });
 
   // TODO: startGameだと名前的に微妙な気がする
-  // startGameの変数
+  // startGameのリアクティブ
   const startGameRef = reactive({
     jsonBody: "",
     nowNumber: 0,
     nowName: "",
     gameStatus: false,
   });
-  // diciedWinnerの変数
+  // diciedWinnerのリアクティブ
   const deciedWinnerRef = reactive({
     winner: "",
     defineWinner: false,
   });
 
-  // エラーの変数
+  // エラーのリアクティブ
   const errorRef = reactive({
     errorMessage: "",
     errorStatus: false,
   });
 
+  // htmlが見つからなかった場合のリアクティブ
+  const notFoundRef = reactive({
+    isNotFound: false,
+    notFoundText: "",
+  });
+
   const switchAction = (message: any) => {
     switch (message.action) {
       case "error":
+        notFoundRef.isNotFound = false;
         errorRef.errorStatus = true;
         errorRef.errorMessage = message.message;
         break;
       case "subscribed":
+        notFoundRef.isNotFound = false;
         subscribeRef.connect = true;
         if (!subscribeRef.answer)
           subscribeRef.answer = message.answerTitle.split(" - ")[0];
@@ -115,15 +123,20 @@ export const useDecideAction = () => {
         break;
       case "start_game":
       case "send_url":
+        notFoundRef.isNotFound = false;
         startGameRef.nowNumber = message.nextNumber;
         startGameRef.nowName = message.nextName;
         startGameRef.jsonBody = message.data;
         startGameRef.gameStatus = true;
         break;
       case "decied_winner":
+        notFoundRef.isNotFound = false;
         deciedWinnerRef.winner = message.winner;
         deciedWinnerRef.defineWinner = true;
         break;
+      case "not_found":
+        notFoundRef.isNotFound = true;
+        notFoundRef.notFoundText = message.notFoundText;
       default:
         return;
     }
@@ -135,5 +148,6 @@ export const useDecideAction = () => {
     ...toRefs(startGameRef),
     ...toRefs(deciedWinnerRef),
     ...toRefs(errorRef),
+    ...toRefs(notFoundRef),
   };
 };
